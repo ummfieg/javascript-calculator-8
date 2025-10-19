@@ -19,6 +19,28 @@ class App {
     const DEFALUT_DELIM = /[,:]/;
     const CUSTOM_DELIM = /\/\/(.*?)\n/;
     let inputEnter = userInput.replace(/\\n/g, "\n");
+
+    //커스텀 구분자
+    if (CUSTOM_DELIM.test(inputEnter)) {
+      let userDelim = inputEnter.match(CUSTOM_DELIM);
+      userDelim = userDelim[1];
+      splitText = inputEnter.replace(CUSTOM_DELIM, "").split(userDelim);
+    }
+    //기본 구분자
+    else if (DEFALUT_DELIM.test(userInput)) {
+      splitText = userInput.split(DEFALUT_DELIM);
+    }
+    //빈문자열
+    else if (userInput === " ") {
+      result = 0;
+      Console.print(`결과 : ${result}`);
+      return;
+    } else {
+      //
+    }
+    convertNum = splitText.map((num) => Number(num));
+    result = convertNum.reduce((total, num) => total + num, 0);
+    Console.print(`결과 : ${result}`);
   }
 }
 export default App;
