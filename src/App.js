@@ -62,6 +62,24 @@ class App {
       throw new Error(`[ERROR] 기본 구분자 형식이 잘못되었습니다.`);
     }
 
+    // 3. 숫자 검증
+    let numbers = [];
+    if (CUSTOM_DELIM.test(inputEnter)) {
+      const delim = inputEnter.match(CUSTOM_DELIM)[1];
+      numbers = inputEnter.replace(CUSTOM_DELIM, "").split(delim).map(Number);
+    } else {
+      numbers = inputEnter.split(DEFAULT_DELIM).map(Number);
+    }
+
+    if (numbers.some(isNaN)) {
+      throw new Error(`[ERROR] 숫자가 아닌 값이 포함되어 있습니다.`);
+    }
+
+    // 4. 음수 검증
+    if (numbers.some((n) => n < 0)) {
+      throw new Error(`[ERROR] 음수는 입력할 수 없습니다.`);
+    }
+
     return userInput;
   }
 
