@@ -57,7 +57,8 @@ class App {
       }
     }
     // 2. 기본 구분자 검증
-    if (!CUSTOM_DELIM.test(inputEnter) && !DEFAULT_DELIM.test(inputEnter)) {
+    const VALID_DEFAULT = /^[0-9,:-]+$/;
+    if (!CUSTOM_DELIM.test(inputEnter) && !VALID_DEFAULT.test(inputEnter)) {
       throw new Error(`[ERROR] 기본 구분자 형식이 잘못되었습니다.`);
     }
 
