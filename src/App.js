@@ -56,6 +56,11 @@ class App {
         throw new Error(`[ERROR] 커스텀 구분자 형식이 잘못되었습니다.`);
       }
     }
+    // 2. 기본 구분자 검증
+    if (!CUSTOM_DELIM.test(inputEnter) && !DEFAULT_DELIM.test(inputEnter)) {
+      throw new Error(`[ERROR] 기본 구분자 형식이 잘못되었습니다.`);
+    }
+
     return userInput;
   }
 
