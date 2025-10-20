@@ -22,14 +22,12 @@ class App {
     }
   }
   calculator(INPUT_ENTER) {
-    let result = 0;
     let splitText;
-    let convertNum;
 
     //커스텀 구분자
     if (CUSTOM_DELIM.test(INPUT_ENTER)) {
-      let userDelim = INPUT_ENTER.match(CUSTOM_DELIM);
-      userDelim = userDelim[1];
+      let isMatchDelim = INPUT_ENTER.match(CUSTOM_DELIM);
+      userDelim = isMatchDelim[1];
       splitText = INPUT_ENTER.replace(CUSTOM_DELIM, "").split(userDelim);
     }
     //기본 구분자
@@ -37,8 +35,8 @@ class App {
       splitText = INPUT_ENTER.split(DEFAULT_DELIM);
     }
 
-    convertNum = splitText.map((num) => Number(num));
-    result = convertNum.reduce((total, num) => total + num, 0);
+    let convertNum = splitText.map((num) => Number(num));
+    let result = convertNum.reduce((total, num) => total + num, 0);
     Console.print(`결과 : ${result}`);
   }
 
@@ -47,8 +45,8 @@ class App {
 
     // 1. 커스텀 구분자 검증
     if (HAS_CUSTOM_DELIM) {
-      let userDelim = INPUT_ENTER.match(CUSTOM_DELIM)[1];
-      if (!userDelim) {
+      let isMatchDelim = INPUT_ENTER.match(CUSTOM_DELIM)[1];
+      if (!isMatchDelim) {
         throw new Error(`[ERROR] 커스텀 구분자 형식이 잘못되었습니다.`);
       }
     }
