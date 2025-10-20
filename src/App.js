@@ -12,7 +12,8 @@ class App {
       }
       const INPUT_ENTER = USER_INPUT.replace(/\\n/g, "\n");
       const VALIDATED_NUMBERS = this.processInput(INPUT_ENTER);
-      return this.calculator(VALIDATED_NUMBERS);
+      const RESULT = this.calculator(VALIDATED_NUMBERS);
+      Console.print(`결과 : ${RESULT}`);
     } catch (error) {
       this.errorMessage(error);
       throw error;
@@ -61,9 +62,7 @@ class App {
   }
 
   calculator(VALIDATED_NUMBERS) {
-    let result = VALIDATED_NUMBERS.reduce((total, num) => total + num, 0);
-    Console.print(`결과 : ${result}`);
-    return result;
+    return VALIDATED_NUMBERS.reduce((total, num) => total + num, 0);
   }
 
   errorMessage(error) {
