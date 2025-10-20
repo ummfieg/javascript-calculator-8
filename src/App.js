@@ -9,66 +9,66 @@ class App {
       let userInput = await Console.readLineAsync(
         "덧셈할 문자열을 입력해주세요.\n"
       );
-      console.log("입력한 값:", userInput);
-      this.isValidInput(userInput);
-      this.calculator(userInput);
+      console.log(userInput);
+      const INPUT_ENTER = userInput.replace(/\\n/g, "\n");
+      this.processInput(INPUT_ENTER);
+      this.calculator(INPUT_ENTER);
     } catch (error) {
       this.errorMessage(error);
       throw error;
     }
   }
-  calculator(userInput) {
+  calculator(INPUT_ENTER) {
     let result = 0;
     let splitText;
     let convertNum;
-    let inputEnter = userInput.replace(/\\n/g, "\n");
 
     //커스텀 구분자
-    if (CUSTOM_DELIM.test(inputEnter)) {
-      let userDelim = inputEnter.match(CUSTOM_DELIM);
+    if (CUSTOM_DELIM.test(INPUT_ENTER)) {
+      let userDelim = INPUT_ENTER.match(CUSTOM_DELIM);
       userDelim = userDelim[1];
-      splitText = inputEnter.replace(CUSTOM_DELIM, "").split(userDelim);
+      splitText = INPUT_ENTER.replace(CUSTOM_DELIM, "").split(userDelim);
     }
     //기본 구분자
-    else if (DEFAULT_DELIM.test(userInput)) {
-      splitText = userInput.split(DEFAULT_DELIM);
+    else if (DEFAULT_DELIM.test(INPUT_ENTER)) {
+      splitText = INPUT_ENTER.split(DEFAULT_DELIM);
     }
     //빈문자열
-    else if (userInput === " ") {
+    else if (INPUT_ENTER === "") {
       result = 0;
       Console.print(`결과 : ${result}`);
       return;
-    } else {
-      //
     }
     convertNum = splitText.map((num) => Number(num));
     result = convertNum.reduce((total, num) => total + num, 0);
     Console.print(`결과 : ${result}`);
   }
 
-  isValidInput(userInput) {
-    const inputEnter = userInput.replace(/\\n/g, "\n");
+  processInput(INPUT_ENTER) {
+    const HAS_CUSTOM_DELIM = CUSTOM_DELIM.test(INPUT_ENTER);
 
     // 1. 커스텀 구분자 검증
-    if (CUSTOM_DELIM.test(inputEnter)) {
-      let userDelim = inputEnter.match(CUSTOM_DELIM)[1];
+    if (HAS_CUSTOM_DELIM) {
+      let userDelim = INPUT_ENTER.match(CUSTOM_DELIM)[1];
       if (!userDelim) {
         throw new Error(`[ERROR] 커스텀 구분자 형식이 잘못되었습니다.`);
       }
     }
     // 2. 기본 구분자 검증
-    const VALID_DEFAULT = /^[0-9,:-]+$/;
-    if (!CUSTOM_DELIM.test(inputEnter) && !VALID_DEFAULT.test(inputEnter)) {
-      throw new Error(`[ERROR] 기본 구분자 형식이 잘못되었습니다.`);
+    const VALID_DEFAULT = /^[0-9a-zA-Z,:-]+$/;
+    if (!HAS_CUSTOM_DELIM && !VALID_DEFAULT.test(INPUT_ENTER)) {
+      throw new Error(`[ERROR] 구분자 형식이 잘못되었습니다.`);
     }
 
     // 3. 숫자 검증
     let numbers = [];
-    if (CUSTOM_DELIM.test(inputEnter)) {
-      const delim = inputEnter.match(CUSTOM_DELIM)[1];
-      numbers = inputEnter.replace(CUSTOM_DELIM, "").split(delim).map(Number);
+    if (HAS_CUSTOM_DELIM) {
+      let parsingDelim = INPUT_ENTER.match(CUSTOM_DELIM)[1];
+      numbers = INPUT_ENTER.replace(CUSTOM_DELIM, "")
+        .split(parsingDelim)
+        .map(Number);
     } else {
-      numbers = inputEnter.split(DEFAULT_DELIM).map(Number);
+      numbers = INPUT_ENTER.split(DEFAULT_DELIM).map(Number);
     }
 
     if (numbers.some(isNaN)) {
@@ -76,13 +76,12 @@ class App {
     }
 
     // 4. 음수 검증
-    if (numbers.some((n) => n < 0)) {
+    if (numbers.some((num) => num < 0)) {
       throw new Error(`[ERROR] 음수는 입력할 수 없습니다.`);
     }
 
-    return userInput;
+    return INPUT_ENTER;
   }
-
   errorMessage(error) {
     Console.print(error.message);
   }
