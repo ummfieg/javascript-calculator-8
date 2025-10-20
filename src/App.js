@@ -9,7 +9,10 @@ class App {
       let userInput = await Console.readLineAsync(
         "덧셈할 문자열을 입력해주세요.\n"
       );
-      console.log(userInput);
+      if (userInput.trim() === "") {
+        Console.print(0);
+        return 0;
+      }
       const INPUT_ENTER = userInput.replace(/\\n/g, "\n");
       this.processInput(INPUT_ENTER);
       this.calculator(INPUT_ENTER);
@@ -33,12 +36,7 @@ class App {
     else if (DEFAULT_DELIM.test(INPUT_ENTER)) {
       splitText = INPUT_ENTER.split(DEFAULT_DELIM);
     }
-    //빈문자열
-    else if (INPUT_ENTER === "") {
-      result = 0;
-      Console.print(`결과 : ${result}`);
-      return;
-    }
+
     convertNum = splitText.map((num) => Number(num));
     result = convertNum.reduce((total, num) => total + num, 0);
     Console.print(`결과 : ${result}`);
